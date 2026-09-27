@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QuickLLM — Self-hosted generative AI on a single 8 GB GPU</title>
+  <meta name="description" content="QuickLLM: a self-hosted, multimodal generative AI platform that orchestrates text, images, video, 3D and music on a single 8 GB GPU.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23c7aee8'/%3E%3Cstop offset='1' stop-color='%237b5fc0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-weight='800' font-size='26' text-anchor='middle' fill='%23150f1f'%3EQL%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+    /* Se un'immagine non esiste con l'estensione scritta nel codice, prova da sola
+       le altre (png, jpg, jpeg, webp): così non importa con quale formato salvi i file. */
+    (function () {
+      var EXT = ['png', 'jpg', 'jpeg', 'webp'];
+      window.addEventListener('error', function (e) {
+        var img = e.target;
+        if (!img || img.tagName !== 'IMG') return;
+        var m = img.getAttribute('src').match(/^(.*)\.(png|jpe?g|webp)$/i);
+        if (!m) return;
+        var tried = (img.dataset.tried || m[2].toLowerCase()).split(',');
+        var next = EXT.filter(function (x) { return tried.indexOf(x) === -1; })[0];
+        if (!next) return;
+        img.dataset.tried = tried.concat(next).join(',');
+        img.src = m[1] + '.' + next;
+        var box = img.closest('.portrait');
+        if (box) box.style.setProperty('--photo', 'url("' + img.getAttribute('src') + '")');
+      }, true);
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="aurora-bg" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span><span class="a4"></span></div>
+<div class="glass-sheen" aria-hidden="true"><span class="s1"></span><span class="s2"></span></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="glass">
+      <a class="app-logo" href="#"><span class="logo-icon">◈</span><span class="logo-text">Quick<em>LLM</em></span></a>
+      <nav class="nav">
+        <a href="#problem" data-i18n="nav.problem">The problem</a>
+        <a href="#generate" data-i18n="nav.generate">What it generates</a>
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#hood" data-i18n="nav.hood">Under the hood</a>
+        <a href="#infrastructure" data-i18n="nav.infra">Infrastructure</a>
+        <a href="#stack" data-i18n="nav.stack">Tech stack</a>
+      </nav>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="it" aria-pressed="false">IT</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-panel">
+        <div class="brand-row"><span class="brand-mark">◈</span><span class="brand-name">Quick<em>LLM</em></span></div>
+        <h1 data-i18n="hero.title">A complete generative AI suite on <em>a single 8 GB GPU</em></h1>
+        <p class="lead" data-i18n="hero.lead">Text, images, video, 3D models and music. QuickLLM swaps models in and out of memory based on each request and runs entirely on two home machines, with no cloud services.</p>
+      </div>
+
+      <div class="glass hero-media">
+        <div class="media player">
+            <video src="assets/hero.mp4" autoplay muted loop playsinline preload="metadata" disablepictureinpicture disableremoteplayback tabindex="-1"></video>
+            <button class="player-toggle" type="button">
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+            </button>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= THE PROBLEM ================= -->
+  <section id="problem">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker" data-i18n="problem.kicker">The problem</span>
+        <h2 data-i18n="problem.title">One GPU, one model at a time</h2>
+        <p data-i18n="problem.text">The language model that drives the chat and the models that generate images, video, 3D and music don't fit in 8 GB of VRAM together: switching means unloading one and loading the other from disk, and every swap takes tens of seconds. If a request for four images bounced between them after each image, the wait would multiply. QuickLLM collects all the work first and swaps models only once.</p>
+      </div>
+
+      <div class="flow">
+        <div class="card">
+          <span class="kicker" data-i18n="step1.k">Step 1</span>
+          <span class="card-title" data-i18n="step1.t">Plan</span>
+          <span class="card-desc" data-i18n="step1.d">The local LLM reads the request and produces a JSON plan: what to generate, how many times, with which prompt.</span>
+        </div>
+        <div class="card">
+          <span class="kicker" data-i18n="step2.k">Step 2</span>
+          <span class="card-title" data-i18n="step2.t">Free the VRAM</span>
+          <span class="card-desc" data-i18n="step2.d">Jobs go into a single queue and the LLM is unloaded from memory only once.</span>
+        </div>
+        <div class="card">
+          <span class="kicker" data-i18n="step3.k">Step 3</span>
+          <span class="card-title" data-i18n="step3.t">Generate</span>
+          <span class="card-desc" data-i18n="step3.d">ComfyUI runs images, video, 3D and music in sequence while the chat waits its turn.</span>
+        </div>
+        <div class="card">
+          <span class="kicker" data-i18n="step4.k">Step 4</span>
+          <span class="card-title" data-i18n="step4.t">Reload</span>
+          <span class="card-desc" data-i18n="step4.d">Once the queue is empty, the LLM returns to memory and the conversation picks up where it left off.</span>
+        </div>
+      </div>
+
+      <div class="card vram">
+        <span class="label">RTX 2070 Super · 8 GB</span>
+        <span class="meter"><span></span></span>
+        <p data-i18n="vram.note">Only one model in memory at any time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHAT IT GENERATES ================= -->
+  <section id="generate">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker" data-i18n="gen.kicker">What it generates</span>
+        <h2 data-i18n="gen.title">All local, from the same chat</h2>
+        <p data-i18n="gen.text">Everything below was generated locally by QuickLLM.</p>
+      </div>
+
+      <div class="grid-media">
+        <div class="card tile span-6">
+          <div class="img-pair">
+            <div class="media wide">
+              <img src="assets/immagine-cinematica-1280.jpg" srcset="assets/immagine-cinematica-1280.jpg 1280w, assets/immagine-cinematica-2560.jpg 2560w" sizes="(max-width: 560px) 100vw, 50vw" width="2560" height="1088" data-full="assets/immagine-cinematica.png" data-full-size="8736 × 3712 · PNG 46 MB" alt="Cinematic image generated with FLUX" data-i18n-alt="alt.cinematic" loading="lazy">
+            </div>
+            <div class="media square">
+              <img src="assets/immagine-quadrata-800.jpg" srcset="assets/immagine-quadrata-800.jpg 800w, assets/immagine-quadrata-1600.jpg 1600w" sizes="(max-width: 560px) 100vw, 25vw" width="1600" height="1600" data-full="assets/immagine-quadrata.png" data-full-size="5792 × 5792 · PNG 38 MB" alt="Square image generated with FLUX" data-i18n-alt="alt.square" loading="lazy">
+            </div>
+          </div>
+          <div class="caption"><span class="card-title" data-i18n="img.t">Images</span><span class="badge" data-i18n="img.b">FLUX · LoRA · up to 8K</span></div>
+          <span class="card-desc" data-i18n="img.d">Prompt rewritten by the model, generated at about 2 MP and upscaled 4× to 8736×3712.</span>
+        </div>
+
+        <div class="card tile span-3">
+          <div class="media player">
+            <video src="assets/video.mp4" autoplay muted loop playsinline preload="metadata" disablepictureinpicture disableremoteplayback tabindex="-1"></video>
+            <button class="player-toggle" type="button">
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+            </button>
+          </div>
+          <div class="caption"><span class="card-title">Video</span><span class="badge">Stable Video Diffusion</span></div>
+          <span class="card-desc" data-i18n="vid.d">Short clips generated from an image, upscaled to 4096×2304 by the same upscaler.</span>
+        </div>
+
+        <div class="card tile span-3">
+          <div class="media player">
+            <video src="assets/modello-3d.mp4" autoplay muted loop playsinline preload="metadata" disablepictureinpicture disableremoteplayback tabindex="-1"></video>
+            <button class="player-toggle" type="button">
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+            </button>
+          </div>
+          <div class="caption"><span class="card-title" data-i18n="3d.t">3D models</span><span class="badge">Hunyuan3D 2.1 · GLB</span></div>
+          <span class="card-desc" data-i18n="3d.d">From an image to a mesh exported as GLB, ready for a 3D engine.</span>
+        </div>
+
+        <div class="card tile span-6 music-strip">
+          <div class="music-text">
+            <div class="caption"><span class="card-title" data-i18n="music.t">Music</span><span class="badge gold">ACE-Step 3.5B</span></div>
+          <span class="card-desc" data-i18n="music.d">Songs of up to 90 seconds with lyrics, written and produced from a text description.</span>
+          </div>
+          <div class="audio-player">
+            <audio src="assets/musica.mp3" preload="metadata"></audio>
+            <button class="ap-btn" type="button">
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            </button>
+            <div class="ap-track"><span class="ap-fill"></span></div>
+            <span class="ap-time">0:00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FEATURES ================= -->
+  <section id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker" data-i18n="feat.kicker">Features</span>
+        <h2 data-i18n="feat.title">Beyond generation</h2>
+      </div>
+
+      <div class="feature">
+        <div class="text">
+          <span class="badge">agent mode</span>
+          <h3 data-i18n="agent.t">Writes, runs and publishes code</h3>
+          <p data-i18n="agent.p">A ReAct agent creates files, edits them, runs them in an isolated sandbox and fixes errors until the task is done.</p>
+          <ul>
+            <li data-i18n="agent.l1">code execution in dozens of languages with Piston</li>
+            <li data-i18n="agent.l2">generated websites published in one click</li>
+            <li data-i18n="agent.l3">video games built by the same engine</li>
+          </ul>
+        </div>
+        <div class="glass frame">
+          <div class="media player">
+            <video src="assets/agent.mp4" autoplay muted loop playsinline preload="metadata" disablepictureinpicture disableremoteplayback tabindex="-1"></video>
+            <button class="player-toggle" type="button">
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature flip">
+        <div class="text">
+          <span class="badge gold">RAG</span>
+          <h3 data-i18n="rag.t">Answers from your documents</h3>
+          <p data-i18n="rag.p">Uploaded PDFs are split into chunks, embedded locally and searched by similarity. Answers cite their sources.</p>
+          <ul>
+            <li data-i18n="rag.l1">embeddings with EmbeddingGemma, no external services</li>
+            <li data-i18n="rag.l2">pre-indexed documentation collections</li>
+            <li data-i18n="rag.l3">web search when the documents aren't enough</li>
+          </ul>
+        </div>
+        <div class="glass frame">
+          <div class="media player">
+            <video src="assets/rag.mp4" autoplay muted loop playsinline preload="metadata" disablepictureinpicture disableremoteplayback tabindex="-1"></video>
+            <button class="player-toggle" type="button">
+              <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+              <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= UNDER THE HOOD ================= -->
+  <section id="hood">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker" data-i18n="hood.kicker">Under the hood</span>
+        <h2 data-i18n="hood.title">The choices you don't see</h2>
+        <p data-i18n="hood.text">Part of the work never shows up on screen: it's what keeps the system running when requests pile up, when a release goes wrong or when someone tries to use it without permission.</p>
+      </div>
+
+      <div class="hood">
+        <div class="card">
+          <div class="hood-head"><span class="hood-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h10M9 12h10M9 19h10"/><path d="M4 5.5l1.2 1.2L7 4.5M4 12.5l1.2 1.2L7 11.5M4 19.5l1.2 1.2L7 18.5"/></svg></span><span class="kicker">Planner</span></div>
+          <span class="card-title" data-i18n="h1.t">Decides before it answers</span>
+          <span class="card-desc" data-i18n="h1.d">Before the visible reply, the model produces a JSON plan of the actions to run: generations, web searches, virtual machines. Separating the decision from the answer makes even a small model reliable.</span>
+        </div>
+        <div class="card">
+          <div class="hood-head"><span class="hood-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></svg></span><span class="kicker" data-i18n="h2.k">Shared GPU</span></div>
+          <span class="card-title" data-i18n="h2.t">Never two models at once</span>
+          <span class="card-desc" data-i18n="h2.d">While ComfyUI is generating, the backend rejects text requests with <code>503</code> and <code>Retry-After</code>, and the client retries on its own. It's mutual exclusion between two processes on two different machines.</span>
+        </div>
+        <div class="card">
+          <div class="hood-head"><span class="hood-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-2.9 7.7-7 9.5-4.1-1.8-7-5.1-7-9.5V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg></span><span class="kicker" data-i18n="h3.k">Releases</span></div>
+          <span class="card-title" data-i18n="h3.t">A safety net</span>
+          <span class="card-desc" data-i18n="h3.d">A production deploy only starts if staging is green on the same commit. Before updating, it backs up the database and records the restore point for rollback.</span>
+        </div>
+        <div class="card">
+          <div class="hood-head"><span class="hood-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.2"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3"/><path d="M12 14.5v2.5"/></svg></span><span class="kicker" data-i18n="h4.k">Access</span></div>
+          <span class="card-title" data-i18n="h4.t">No forgotten routes</span>
+          <span class="card-desc" data-i18n="h4.d">Every backend route must declare its access level: if it's missing, the server won't start. Automated tests try to get in without credentials and with tampered paths.</span>
+        </div>
+        <div class="card">
+          <div class="hood-head"><span class="hood-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2.5L5 13.5h6l-1 8 8.5-11h-6l1-8z"/></svg></span><span class="kicker" data-i18n="h5.k">Costs</span></div>
+          <span class="card-title" data-i18n="h5.t">A budget in euros of electricity</span>
+          <span class="card-desc" data-i18n="h5.d">Each IP has a daily budget based on real power consumption: GPU watts times generation time. Past the limit, requests are paused until the next day.</span>
+        </div>
+        <div class="card">
+          <div class="hood-head"><span class="hood-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 4.8-9 4.8-9-4.8L12 3z"/><path d="M3 12.2l9 4.8 9-4.8"/><path d="M3 16.6l9 4.8 9-4.8"/></svg></span><span class="kicker" data-i18n="h6.k">Environments</span></div>
+          <span class="card-title" data-i18n="h6.t">Truly isolated staging</span>
+          <span class="card-desc" data-i18n="h6.d">The beta has its own database, configuration and branch, and is reachable only through the VPN: from the local network the port doesn't respond at all.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= INFRASTRUCTURE ================= -->
+  <section id="infrastructure">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker" data-i18n="infra.kicker">Infrastructure</span>
+        <h2 data-i18n="infra.title">Two machines, two environments</h2>
+        <p data-i18n="infra.text">The application layer and the GPU work live on separate machines, connected through a VPN. Production and staging are isolated, and every release goes through tests before reaching users.</p>
+      </div>
+
+      <div class="infra">
+        <div class="card node">
+          <span class="kicker" data-i18n="n1.k">Application server</span>
+          <span class="card-title">Server</span>
+          <div class="os">Debian 12</div>
+          <ul>
+            <li><span>Nginx</span><span>reverse proxy</span></li>
+            <li><span data-i18n="n1.py">Python backend</span><span data-i18n="n1.pyd">API and pages</span></li>
+            <li><span>SQLite</span><span>WAL</span></li>
+            <li><span>Piston</span><span>sandbox · Docker</span></li>
+            <li><span>SearXNG</span><span data-i18n="n1.sx">search · Docker</span></li>
+            <li><span data-i18n="n1.gh">GitHub Actions runner</span><span>CI/CD</span></li>
+          </ul>
+        </div>
+
+        <div class="link">
+          <span>Tailscale</span>
+          <span class="line"></span>
+          <span>VPN mesh</span>
+        </div>
+
+        <div class="card node">
+          <span class="kicker" data-i18n="n2.k">Inference worker</span>
+          <span class="card-title" data-i18n="n2.t">GPU workstation</span>
+          <div class="os">CachyOS · RTX 2070 Super 8 GB</div>
+          <ul>
+            <li><span>LM Studio</span><span data-i18n="n2.lm">text · embeddings</span></li>
+            <li><span>ComfyUI</span><span data-i18n="n2.cu">images · video · 3D · audio</span></li>
+            <li><span>QEMU/KVM</span><span data-i18n="n2.vm">on-demand VMs</span></li>
+            <li><span>noVNC</span><span data-i18n="n2.vnc">in-browser console</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="infra-extra">
+        <div class="card tile">
+          <div class="media">
+            <img src="assets/pannello.png" alt="QuickLLM control panel" data-i18n-alt="alt.panel" loading="lazy">
+          </div>
+          <div class="caption"><span class="card-title" data-i18n="panel.t">Control panel</span><span class="badge">systemd · Beszel</span></div>
+          <span class="card-desc" data-i18n="panel.d">Service status, monitoring of both machines and environment isolation.</span>
+        </div>
+        <div class="card tile">
+          <div class="media">
+            <img src="assets/pipeline.png" alt="Release pipeline on GitHub Actions" data-i18n-alt="alt.pipeline" loading="lazy">
+          </div>
+          <div class="caption"><span class="card-title" data-i18n="pipe.t">Release pipeline</span><span class="badge">GitHub Actions</span></div>
+          <span class="card-desc" data-i18n="pipe.d">The production deploy only runs if staging is green, with database backup and rollback.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TECH STACK ================= -->
+  <section id="stack">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker" data-i18n="stack.kicker">Tech stack</span>
+        <h2 data-i18n="stack.title">The project's stack</h2>
+      </div>
+      <div class="stack">
+        <span class="badge">Linux</span><span class="badge">Docker</span><span class="badge">Nginx</span><span class="badge">systemd</span>
+        <span class="badge">Tailscale</span><span class="badge">GitHub Actions</span><span class="badge">Python</span><span class="badge">JavaScript</span>
+        <span class="badge">SQLite</span><span class="badge">LM Studio</span><span class="badge">ComfyUI</span><span class="badge">FLUX</span>
+        <span class="badge">Stable Video Diffusion</span><span class="badge">Hunyuan3D</span><span class="badge">ACE-Step</span>
+        <span class="badge">Piston</span><span class="badge">SearXNG</span><span class="badge">Beszel</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AUTORE ================= -->
+  <section id="author" class="author">
+    <div class="wrap">
+      <div class="card author-card">
+        <img class="author-photo" src="../assets/preview.png" alt="Giovanni Emanuel Montoro" loading="lazy">
+        <div class="author-text">
+          <span class="kicker" data-i18n="author.kicker">Built by</span>
+          <span class="author-name">Giovanni Emanuel Montoro</span>
+          <p data-i18n="author.text">IT consultant based in Catania, working across data engineering, application support and AI. QuickLLM is one of my personal projects: you'll find the others, along with my background, on my portfolio.</p>
+        </div>
+        <a class="author-cta" href="../"><span data-i18n="author.cta">Visit my portfolio</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="glass">
+      <span data-i18n="footer">QuickLLM · a project by Giovanni Emanuel Montoro · infrastructure and orchestration, AI-assisted development</span>
+      <span><a href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/">LinkedIn</a> · <a href="mailto:montgiovem@gmail.com">montgiovem@gmail.com</a></span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="lightbox-close" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <figure><img alt=""><figcaption></figcaption></figure>
+</div>
+
+<script>
+  /* ---------- Lingua: inglese nel markup, italiano qui sotto ---------- */
+  const IT = {
+  "nav.problem": "Il problema",
+  "nav.generate": "Cosa genera",
+  "nav.features": "Funzionalità",
+  "nav.hood": "Sotto il cofano",
+  "nav.infra": "Infrastruttura",
+  "nav.stack": "Tecnologie",
+  "hero.title": "Un'intera suite di AI generativa su <em>una GPU da 8 GB</em>",
+  "hero.lead": "Testo, immagini, video, modelli 3D e musica. QuickLLM alterna i modelli in memoria in base alla richiesta e gira interamente su due macchine di casa, senza servizi cloud.",
+  "problem.kicker": "Il problema",
+  "problem.title": "Una GPU, un modello alla volta",
+  "problem.text": "Il modello linguistico che guida la chat e i modelli che generano immagini, video, 3D e musica non entrano insieme in 8 GB di VRAM: per passare dall'uno all'altro bisogna scaricarne uno e caricare l'altro dal disco, e ogni cambio richiede decine di secondi. Se per una richiesta di quattro immagini il sistema facesse avanti e indietro dopo ogni immagine, l'attesa si moltiplicherebbe. QuickLLM raccoglie prima tutto il lavoro e cambia modello una volta sola.",
+  "step1.k": "Passo 1",
+  "step1.t": "Pianifica",
+  "step1.d": "L'LLM locale legge la richiesta e produce un piano in JSON: cosa generare, quante volte, con quale prompt.",
+  "step2.k": "Passo 2",
+  "step2.t": "Libera la VRAM",
+  "step2.d": "I lavori finiscono in una coda unica e l'LLM viene scaricato dalla memoria una sola volta.",
+  "step3.k": "Passo 3",
+  "step3.t": "Genera",
+  "step3.d": "ComfyUI esegue in fila immagini, video, 3D e musica, mentre la chat attende il proprio turno.",
+  "step4.k": "Passo 4",
+  "step4.t": "Ricarica",
+  "step4.d": "A coda vuota l'LLM torna in memoria e la conversazione riprende da dove si era fermata.",
+  "vram.note": "Un solo modello in memoria in ogni momento.",
+  "gen.kicker": "Cosa genera",
+  "gen.title": "Tutto in locale, dalla stessa chat",
+  "gen.text": "Tutti i contenuti qui sotto sono stati generati in locale da QuickLLM.",
+  "img.t": "Immagini",
+  "img.b": "FLUX · LoRA · fino a 8K",
+  "img.d": "Prompt riscritto dal modello, generazione a circa 2 MP e upscaling 4× fino a 8736×3712.",
+  "vid.d": "Clip brevi a partire da un'immagine, portate a 4096×2304 dallo stesso upscaler.",
+  "3d.t": "Modelli 3D",
+  "3d.d": "Da un'immagine a una mesh esportabile in GLB, pronta per un motore 3D.",
+  "music.t": "Musica",
+  "music.d": "Brani fino a 90 secondi con testo, scritti e prodotti a partire da una descrizione.",
+  "feat.kicker": "Funzionalità",
+  "feat.title": "Oltre la generazione",
+  "agent.t": "Scrive, esegue e pubblica codice",
+  "agent.p": "Un agente con ciclo ReAct crea file, li modifica, li esegue in una sandbox isolata e corregge gli errori fino al risultato.",
+  "agent.l1": "esecuzione di codice in decine di linguaggi con Piston",
+  "agent.l2": "siti generati pubblicabili con un clic",
+  "agent.l3": "videogiochi creati dallo stesso motore",
+  "rag.t": "Risponde usando i tuoi documenti",
+  "rag.p": "I PDF caricati vengono divisi in frammenti, trasformati in embedding in locale e interrogati per similarità. Le risposte citano le fonti.",
+  "rag.l1": "embedding con EmbeddingGemma, senza servizi esterni",
+  "rag.l2": "raccolte di documentazione già indicizzate",
+  "rag.l3": "ricerca web integrata quando i documenti non bastano",
+  "hood.kicker": "Sotto il cofano",
+  "hood.title": "Le scelte che non si vedono",
+  "hood.text": "Una parte del lavoro non compare sullo schermo: è quello che tiene in piedi il sistema quando le richieste arrivano insieme, quando un rilascio va storto o quando qualcuno prova a usarlo senza permesso.",
+  "h1.t": "Decide prima di rispondere",
+  "h1.d": "Prima della risposta visibile, il modello produce un piano in JSON con le azioni da eseguire: generazioni, ricerche web, macchine virtuali. Separare la decisione dalla risposta rende affidabile anche un modello piccolo.",
+  "h2.k": "GPU condivisa",
+  "h2.t": "Mai due modelli insieme",
+  "h2.d": "Mentre ComfyUI genera, il backend respinge le richieste di testo con <code>503</code> e <code>Retry-After</code>, e il client riprova da solo. È una mutua esclusione tra due processi su due macchine diverse.",
+  "h3.k": "Rilasci",
+  "h3.t": "Una rete di sicurezza",
+  "h3.d": "Il deploy in produzione parte solo se lo staging è verde sullo stesso commit. Prima dell'aggiornamento esegue il backup del database e registra il punto di ripristino per il rollback.",
+  "h4.k": "Accessi",
+  "h4.t": "Nessuna rotta dimenticata",
+  "h4.d": "Ogni rotta del backend deve dichiarare il proprio livello d'accesso: se manca, il server non parte. Test automatici provano a entrare senza credenziali e con percorsi alterati.",
+  "h5.k": "Costi",
+  "h5.t": "Budget in euro di corrente",
+  "h5.d": "Ogni IP ha un budget giornaliero calcolato sul consumo elettrico reale: watt della GPU per durata della generazione. Superata la soglia, le richieste vengono sospese fino al giorno dopo.",
+  "h6.k": "Ambienti",
+  "h6.t": "Staging isolato davvero",
+  "h6.d": "La beta ha database, configurazione e branch propri, ed è raggiungibile solo dalla VPN: dalla rete locale la porta non risponde affatto.",
+  "infra.kicker": "Infrastruttura",
+  "infra.title": "Due macchine, due ambienti",
+  "infra.text": "Il piano applicativo e il lavoro sulla GPU vivono su macchine separate, collegate da una VPN. Produzione e staging sono isolati, e ogni rilascio passa dai test prima di arrivare agli utenti.",
+  "n1.k": "Server applicativo",
+  "n1.py": "Backend Python",
+  "n1.pyd": "API e pagine",
+  "n1.sx": "ricerca · Docker",
+  "n1.gh": "Runner GitHub Actions",
+  "n2.k": "Worker di inferenza",
+  "n2.t": "Workstation GPU",
+  "n2.lm": "testo · embedding",
+  "n2.cu": "immagini · video · 3D · audio",
+  "n2.vm": "VM su richiesta",
+  "n2.vnc": "console nel browser",
+  "panel.t": "Pannello di controllo",
+  "panel.d": "Stato dei servizi, monitoraggio delle due macchine e isolamento degli ambienti.",
+  "pipe.t": "Pipeline di rilascio",
+  "pipe.d": "Il deploy in produzione parte solo se lo staging è verde, con backup del database e rollback.",
+  "stack.kicker": "Tecnologie",
+  "stack.title": "Lo stack del progetto",
+  "author.kicker": "Realizzato da",
+  "author.text": "Consulente IT a Catania, tra data engineering, application support e intelligenza artificiale. QuickLLM è uno dei miei progetti personali: gli altri, insieme al mio percorso, li trovi nel portfolio.",
+  "author.cta": "Visita il mio portfolio",
+  "footer": "QuickLLM · progetto di Giovanni Emanuel Montoro · infrastruttura e orchestrazione, sviluppo assistito da AI",
+  "alt.cinematic": "Immagine cinematografica generata con FLUX",
+  "alt.square": "Immagine quadrata generata con FLUX",
+  "alt.music": "Brano musicale generato in chat",
+  "alt.panel": "Pannello di controllo di QuickLLM",
+  "alt.pipeline": "Pipeline di rilascio su GitHub Actions"
+};
+  const META = {
+    en: { title: document.title, desc: document.querySelector('meta[name="description"]').content },
+    it: { title: "QuickLLM — AI generativa self-hosted su una GPU da 8 GB",
+          desc: "QuickLLM: piattaforma di AI generativa self-hosted e multimodale che orchestra testo, immagini, video, 3D e musica su una singola GPU da 8 GB." }
+  };
+  const LABELS = {
+    en: { pause: "Pause video", play: "Play video", apPlay: "Play song", apPause: "Pause song", zoom: "Enlarge image", close: "Close", original: "Original" },
+    it: { pause: "Metti in pausa", play: "Riproduci il video", apPlay: "Riproduci il brano", apPause: "Metti in pausa il brano", zoom: "Ingrandisci l'immagine", close: "Chiudi", original: "Originale" }
+  };
+  // Il testo inglese si legge direttamente dalla pagina, così non va scritto due volte.
+  const EN = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { EN[el.dataset.i18n] = el.innerHTML; });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => { EN[el.dataset.i18nAlt] = el.alt; });
+
+  let lang = 'en';
+  function setLang(next) {
+    lang = next === 'it' ? 'it' : 'en';
+    const dict = lang === 'it' ? IT : EN;
+    document.querySelectorAll('[data-i18n]').forEach(el => { const v = dict[el.dataset.i18n]; if (v != null) el.innerHTML = v; });
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => { const v = dict[el.dataset.i18nAlt]; if (v != null) el.alt = v; });
+    document.documentElement.lang = lang;
+    document.title = META[lang].title;
+    document.querySelector('meta[name="description"]').content = META[lang].desc;
+    document.querySelectorAll('.lang-switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+    document.dispatchEvent(new Event('langchange'));
+    try { localStorage.setItem('quickllm-lang', lang); } catch (e) {}
+  }
+  document.querySelectorAll('.lang-switch button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  /* Tornando al portfolio, porta con sé la lingua scelta qui */
+  document.querySelectorAll('.author-cta').forEach(a => a.addEventListener('click', () => {
+    try { localStorage.setItem('portfolio-lang', lang); } catch (e) {}
+  }));
+
+  /* ---------- Video in loop: nessun controllo di avanzamento, solo pausa e ripresa ---------- */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.player').forEach(box => {
+    const video = box.querySelector('video');
+    const btn = box.querySelector('.player-toggle');
+    let userPaused = reduceMotion;
+    const sync = () => {
+      box.classList.toggle('paused', video.paused);
+      btn.setAttribute('aria-label', video.paused ? LABELS[lang].play : LABELS[lang].pause);
+    };
+    if (reduceMotion) video.removeAttribute('autoplay');
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    video.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('langchange', sync);
+    btn.addEventListener('click', () => {
+      if (video.paused) { userPaused = false; video.play().catch(() => {}); }
+      else { userPaused = true; video.pause(); }
+    });
+    // Riproduce solo i video visibili.
+    new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !userPaused) video.play().catch(() => {});
+        else if (!entry.isIntersecting) video.pause();
+      });
+    }, { threshold: 0.25 }).observe(box);
+    sync();
+  });
+
+  /* ---------- Lettore audio ---------- */
+  document.querySelectorAll('.audio-player').forEach(player => {
+    const audio = player.querySelector('audio');
+    const btn = player.querySelector('.ap-btn');
+    const fill = player.querySelector('.ap-fill');
+    const time = player.querySelector('.ap-time');
+    const fmt = t => isFinite(t) ? Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0') : '0:00';
+    const label = () => btn.setAttribute('aria-label', audio.paused ? LABELS[lang].apPlay : LABELS[lang].apPause);
+    const update = () => {
+      const d = audio.duration || 0;
+      fill.style.width = d ? (audio.currentTime / d * 100) + '%' : '0%';
+      time.textContent = audio.paused && audio.currentTime === 0 ? fmt(d) : fmt(audio.currentTime);
+    };
+    btn.addEventListener('click', () => audio.paused ? audio.play().catch(() => {}) : audio.pause());
+    audio.addEventListener('play', () => { player.classList.add('playing'); label(); });
+    audio.addEventListener('pause', () => { player.classList.remove('playing'); label(); });
+    audio.addEventListener('ended', () => { audio.currentTime = 0; update(); });
+    audio.addEventListener('timeupdate', update);
+    audio.addEventListener('loadedmetadata', update);
+    document.addEventListener('langchange', label);
+    label();
+  });
+
+  /* ---------- Immagini ingrandibili ---------- */
+  (function () {
+    const box = document.querySelector('.lightbox');
+    const big = box.querySelector('img');
+    const cap = box.querySelector('figcaption');
+    const closeBtn = box.querySelector('.lightbox-close');
+    let lastFocus = null;
+    const label = () => {
+      document.querySelectorAll('.media.zoomable').forEach(m => m.setAttribute('aria-label', LABELS[lang].zoom));
+      closeBtn.setAttribute('aria-label', LABELS[lang].close);
+    };
+    // Nel riquadro si mostra subito la versione più grande dello srcset; su schermi ampi
+    // si carica poi l'originale a piena risoluzione, che resta comunque apribile dal link.
+    let pending = null;
+    const largest = img => {
+      const c = (img.getAttribute('srcset') || '').split(',').map(s => s.trim().split(/\s+/)).filter(p => p[0]);
+      c.sort((a, b) => parseInt(b[1]) - parseInt(a[1]));
+      return c.length ? c[0][0] : (img.currentSrc || img.src);
+    };
+    function open(img) {
+      lastFocus = document.activeElement;
+      big.src = largest(img);
+      big.alt = img.alt;
+      cap.textContent = img.alt;
+      if (pending) pending.onload = null;
+      pending = null;
+      const full = img.dataset.full;
+      if (full) {
+        const a = document.createElement('a');
+        a.href = full;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = `${LABELS[lang].original} ${img.dataset.fullSize} ↗`;
+        a.addEventListener('click', e => e.stopPropagation());
+        cap.append(' · ', a);
+        if (matchMedia('(min-width: 900px)').matches) {
+          const hi = pending = new Image();
+          hi.onload = () => { if (pending === hi && box.classList.contains('open')) big.src = full; };
+          hi.src = full;
+        }
+      }
+      box.classList.add('open');
+      box.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('lightbox-open');
+      closeBtn.focus({ preventScroll: true });
+    }
+    function close() {
+      if (pending) pending.onload = null;
+      pending = null;
+      box.classList.remove('open');
+      box.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('lightbox-open');
+      if (lastFocus) lastFocus.focus({ preventScroll: true });
+    }
+    document.querySelectorAll('.media img').forEach(img => {
+      const media = img.closest('.media');
+      media.classList.add('zoomable');
+      media.setAttribute('role', 'button');
+      media.tabIndex = 0;
+      media.addEventListener('click', () => open(img));
+      media.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(img); } });
+    });
+    box.addEventListener('click', close);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && box.classList.contains('open')) close(); });
+    document.addEventListener('langchange', label);
+    label();
+  })();
+
+  /* ---------- Lingua iniziale: inglese, salvo scelta precedente ---------- */
+  let saved = null;
+  try { saved = localStorage.getItem('quickllm-lang'); } catch (e) {}
+  if (saved === 'it') setLang('it');
+</script>
+</body>
+</html>

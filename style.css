@@ -1,0 +1,296 @@
+/* Portfolio — Giovanni Emanuel Montoro
+   Stessa famiglia visiva di QuickLLM (blu notte, viola, oro, DM Serif),
+   ma più sobria: poco vetro, molto spazio, tipografia in primo piano. */
+
+:root {
+  color-scheme: dark;
+  --bg: #080c14;
+  --bg-2: #0c111c;
+  --surface: rgba(255, 255, 255, 0.028);
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --line: rgba(235, 232, 239, 0.09);
+  --line-2: rgba(235, 232, 239, 0.16);
+  --text: #f0ede6;
+  --text-muted: rgba(240, 237, 230, 0.62);
+  --text-dim: rgba(240, 237, 230, 0.38);
+  --accent: #b79add;
+  --accent-dim: rgba(183, 154, 221, 0.12);
+  --accent-border: rgba(183, 154, 221, 0.28);
+  --accent2: #d6bd8a;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-ui: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-head: 'Manrope', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text);
+  background:
+    radial-gradient(900px 620px at 8% -8%, rgba(150, 105, 255, 0.16), transparent 70%),
+    radial-gradient(760px 600px at 100% 38%, rgba(60, 170, 220, 0.07), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img, video { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+::selection { background: rgba(183, 154, 221, 0.3); }
+
+.wrap { width: min(1120px, 100% - 40px); margin: 0 auto; }
+
+/* ---------- Etichette e titoli ---------- */
+.kicker {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent2);
+}
+h1, h2, h3 { font-family: var(--font-head); font-weight: 700; letter-spacing: -.03em; }
+h2 { font-size: clamp(30px, 4vw, 42px); line-height: 1.1; margin-top: 12px; }
+.accent { color: var(--accent); }
+.muted { color: var(--text-muted); }
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+
+/* ---------- Barra superiore (non fissa) ---------- */
+.topbar { padding: 22px 0; }
+.topbar .wrap { display: flex; align-items: center; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 10px; }
+.logo {
+  width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+  background: linear-gradient(135deg, #c7aee8, #7b5fc0); color: #150f1f;
+  font-family: var(--font-head); font-weight: 800; font-size: 13.5px; letter-spacing: -.02em;
+  box-shadow: 0 6px 18px rgba(123, 95, 192, .35), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.brand-name { font-family: var(--font-head); font-weight: 700; font-size: 15.5px; letter-spacing: -.02em; }
+.nav { display: flex; gap: 4px; margin-left: auto; }
+.nav a { font-size: 13px; color: var(--text-muted); padding: 6px 12px; border-radius: 999px; transition: color .18s, background .18s; }
+.nav a:hover { color: var(--text); background: var(--surface-2); }
+
+.lang-switch { display: flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 999px; flex: none; }
+.lang-switch button {
+  border: 0; background: transparent; color: var(--text-muted); cursor: pointer;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+  padding: 4px 10px; border-radius: 999px; transition: background .18s, color .18s;
+}
+.lang-switch button:hover { color: var(--text); }
+.lang-switch button[aria-pressed="true"] { background: var(--accent-dim); color: var(--text); box-shadow: inset 0 0 0 1px var(--accent-border); }
+
+/* ---------- Pulsanti ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13.5px; font-weight: 500;
+  padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--line-2); color: var(--text);
+  transition: background .18s, border-color .18s, transform .18s;
+}
+.btn:hover { background: var(--surface-2); border-color: rgba(235, 232, 239, 0.26); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #150f1f; }
+.btn.primary:hover { background: #c7aee8; border-color: #c7aee8; }
+.btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- Hero ---------- */
+.hero { padding: 64px 0 88px; }
+.hero .wrap { display: grid; grid-template-columns: 1fr auto; gap: 56px; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13px; color: var(--text-muted);
+  padding: 6px 12px 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+}
+.chip svg { width: 15px; height: 15px; fill: none; stroke: var(--accent2); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hero h1 { font-size: clamp(44px, 7vw, 82px); line-height: 1; font-weight: 800; letter-spacing: -.045em; margin: 22px 0 22px; }
+.hero .lead { font-size: 18px; color: var(--text-muted); max-width: 600px; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.portrait { position: relative; width: 200px; isolation: isolate; }
+/* Alone "ambilight": la foto stessa, sfocata, sparge il suo verde intorno
+   e sfuma nel blu notte della pagina. Sopra, un velo viola lega i due colori. */
+.portrait::before {
+  content: ""; position: absolute; inset: -70%; z-index: -1; border-radius: 50%;
+  background:
+    var(--photo, url("assets/preview.png")) center / 55% no-repeat,
+    radial-gradient(closest-side, rgba(96, 168, 88, .55), rgba(60, 140, 120, .25) 55%, transparent 80%);
+  filter: blur(44px) saturate(1.8) brightness(1.1);
+  opacity: .8;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+          mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+}
+.portrait img { position: relative; box-shadow: 0 18px 50px rgba(0, 0, 0, .45), 0 0 0 6px rgba(120, 190, 110, .06); }
+.portrait .veil {
+  position: absolute; inset: -60%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle at 30% 70%, rgba(150, 105, 255, .26) 0%, rgba(150, 105, 255, .10) 18%, transparent 36%);
+  filter: blur(20px);
+}
+.portrait img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 24px; border: 1px solid var(--line-2); }
+.portrait::after {
+  content: ""; position: absolute; inset: -12px -12px auto auto; width: 64px; height: 64px;
+  border-top: 1px solid var(--accent-border); border-right: 1px solid var(--accent-border); border-radius: 0 30px 0 0;
+}
+
+/* ---------- Sezioni ---------- */
+section.block { padding: 84px 0; border-top: 1px solid var(--line); }
+.head { max-width: 680px; margin-bottom: 44px; }
+.head p { margin-top: 14px; color: var(--text-muted); font-size: 16px; }
+
+/* Chi sono */
+.about .text { max-width: 760px; }
+.about .text p { color: var(--text-muted); margin-bottom: 16px; font-size: 16.5px; }
+.about .text p:first-child { color: var(--text); font-size: 20px; line-height: 1.55; font-weight: 500; }
+
+/* Esperienza: timeline con linea che collega i lavori */
+.timeline { display: grid; }
+.job { display: grid; grid-template-columns: 180px 1fr; }
+.job .when { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); padding-top: 7px; }
+.job > div { position: relative; padding: 0 0 48px 40px; }
+.job:last-child > div { padding-bottom: 0; }
+.job > div::before {
+  content: ""; position: absolute; left: 6px; top: 22px; bottom: -6px; width: 2px; border-radius: 2px;
+  background: linear-gradient(var(--accent-border), rgba(235, 232, 239, .08));
+}
+.job:last-child > div::before { display: none; }
+.job > div::after {
+  content: ""; position: absolute; left: 0; top: 7px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--bg); border: 2px solid var(--accent-border);
+}
+.job:first-child > div::after { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 0 5px rgba(183, 154, 221, .15); }
+.job h3 { font-size: 23px; line-height: 1.25; }
+.job .where { font-size: 14px; color: var(--accent); margin: 4px 0 12px; font-weight: 500; }
+.job .where span { color: var(--text-dim); font-weight: 400; }
+.job p { color: var(--text-muted); }
+.job p strong { color: var(--text); font-weight: 600; }
+.job ul { margin: 10px 0 0 18px; color: var(--text-muted); }
+.job li { margin-bottom: 4px; }
+.job li::marker { color: var(--accent); }
+.job .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.job .note { margin-top: 14px; font-size: 14.5px; }
+
+/* ---------- Progetti ---------- */
+/* Progetto in evidenza: video grande sopra, testo sotto */
+.featured {
+  overflow: hidden; border: 1px solid var(--line-2); border-radius: 22px; margin-bottom: 72px;
+  background: linear-gradient(135deg, rgba(150, 105, 255, .10), rgba(255, 255, 255, .02) 55%);
+}
+.featured .frame { aspect-ratio: 16 / 9; background: var(--bg-2); border-bottom: 1px solid var(--line); }
+.featured .frame video { width: 100%; height: 100%; object-fit: cover; }
+.featured .body { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px 48px; padding: 30px 34px 32px; }
+.featured .intro { display: flex; flex-direction: column; gap: 12px; }
+.featured .side { display: flex; flex-direction: column; gap: 16px; justify-content: space-between; }
+.featured h3 { font-size: 38px; line-height: 1; font-weight: 800; }
+.featured p { color: var(--text-muted); font-size: 15px; }
+.featured .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.featured .btn { align-self: flex-start; }
+
+/* Racconto a scorrimento: testo a sinistra, media che cambia a destra */
+.scrolly { display: grid; grid-template-columns: 1fr 1.2fr; gap: 56px; }
+.steps { display: flex; flex-direction: column; }
+.project { min-height: 64vh; display: flex; flex-direction: column; justify-content: center; padding: 32px 0; opacity: .32; transition: opacity .4s ease; }
+.project.active { opacity: 1; }
+.project .num { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+.project h3 { font-size: 32px; line-height: 1.1; margin: 8px 0 6px; }
+.project .date { font-family: var(--font-mono); font-size: 12px; color: var(--accent2); }
+.project p { color: var(--text-muted); margin-top: 14px; }
+.project .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.project .project-btn { align-self: flex-start; margin-top: 22px; padding: 9px 16px; font-size: 13px; }
+.project .project-btn svg { transition: transform .18s ease; }
+.project .project-btn:hover svg { transform: translate(2px, -2px); }
+
+.stage { position: sticky; top: 12vh; height: 76vh; display: flex; align-items: center; justify-content: center; }
+.stage .pmedia { position: absolute; inset: 0; margin: auto; opacity: 0; transform: translateY(18px) scale(.985); transition: opacity .5s ease, transform .6s cubic-bezier(.2, .8, .2, 1); pointer-events: none; }
+.stage .pmedia.active { opacity: 1; transform: none; }
+
+/* Cornici: desktop 16:9 e telefono */
+.pmedia { display: flex; align-items: center; justify-content: center; }
+.pmedia .screen { position: relative; overflow: hidden; background: var(--bg-2); border: 1px solid var(--line-2); }
+.pmedia .screen img, .pmedia .screen video { width: 100%; height: 100%; object-fit: cover; }
+.pmedia.desktop .screen { width: 100%; aspect-ratio: 16 / 9; border-radius: 14px; box-shadow: 0 30px 80px rgba(0, 0, 0, .45); }
+.pmedia.desktop .screen::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 26px; z-index: 1;
+  background: rgba(12, 17, 28, .92); border-bottom: 1px solid var(--line);
+}
+.pmedia.desktop .screen::after {
+  content: ""; position: absolute; top: 9px; left: 12px; z-index: 2; width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,.18); box-shadow: 14px 0 0 rgba(255,255,255,.18), 28px 0 0 rgba(255,255,255,.18);
+}
+.pmedia.desktop .screen img, .pmedia.desktop .screen video { position: absolute; inset: 26px 0 0 0; height: calc(100% - 26px); }
+.pmedia.phone .screen {
+  height: min(70vh, 640px); aspect-ratio: 9 / 19.5; border-radius: 38px;
+  border: 8px solid #151a26; outline: 1px solid var(--line-2); box-shadow: 0 30px 80px rgba(0, 0, 0, .5);
+}
+.pmedia.phone .screen::before {
+  content: ""; position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 1;
+  width: 32%; height: 20px; border-radius: 999px; background: #151a26;
+}
+.stage .pmedia.desktop { width: 100%; }
+.project .pmedia { display: none; }
+
+/* ---------- Competenze ---------- */
+.skills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.skill { padding: 20px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.skill h3 { font-family: var(--font-ui); font-size: 13px; font-weight: 600; letter-spacing: .04em; color: var(--text); margin-bottom: 12px; }
+.skill .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ---------- Formazione ---------- */
+.edu { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.course { padding: 22px 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.course .when { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+.course h3 { font-size: 19px; line-height: 1.3; margin: 6px 0 4px; }
+.course .where { font-size: 13.5px; color: var(--accent); }
+.course p { color: var(--text-muted); font-size: 14.5px; margin-top: 10px; }
+
+/* ---------- Contatti ---------- */
+.contact { text-align: center; padding: 110px 0 100px; border-top: 1px solid var(--line); }
+.contact h2 { font-size: clamp(40px, 6vw, 70px); line-height: 1; font-weight: 800; letter-spacing: -.045em; }
+.contact p { color: var(--text-muted); font-size: 17px; margin: 18px auto 0; max-width: 520px; }
+.contact .actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+
+footer { border-top: 1px solid var(--line); padding: 26px 0 34px; font-size: 13px; color: var(--text-dim); }
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- Schermi stretti ---------- */
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .lang-switch { margin-left: auto; }
+  .hero { padding: 36px 0 64px; }
+  .hero .wrap { grid-template-columns: 1fr; gap: 36px; }
+  .portrait { width: 140px; order: -1; }
+  .edu { grid-template-columns: 1fr; }
+  .job { grid-template-columns: 1fr; }
+  .job .when { padding: 0 0 8px 40px; }
+  .brand-name { display: none; }
+  .featured .body { grid-template-columns: 1fr; padding: 24px 22px; }
+  .scrolly { grid-template-columns: 1fr; }
+  .stage { display: none; }
+  .project { min-height: 0; opacity: 1; padding: 36px 0; border-bottom: 1px solid var(--line); }
+  .project:last-child { border-bottom: 0; }
+  .project .pmedia { display: flex; order: -1; margin-bottom: 22px; }
+  .project .pmedia.phone .screen { height: 480px; }
+  .skills { grid-template-columns: 1fr 1fr; }
+  section.block { padding: 64px 0; }
+}
+@media (max-width: 560px) {
+  .skills { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .portrait::before { inset: -60%; filter: blur(34px) saturate(1.8) brightness(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .project, .stage .pmedia { transition: none; }
+}

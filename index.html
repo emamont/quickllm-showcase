@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Giovanni Emanuel Montoro — IT Consultant</title>
+  <meta name="description" content="Portfolio of Giovanni Emanuel Montoro, IT consultant in Catania: data engineering, application support and personal projects in AI and software.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23c7aee8'/%3E%3Cstop offset='1' stop-color='%237b5fc0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-family='Arial,sans-serif' font-weight='800' font-size='26' text-anchor='middle' fill='%23150f1f'%3EGM%3C/text%3E%3C/svg%3E">
+  <meta property="og:title" content="Giovanni Emanuel Montoro — IT Consultant">
+  <meta property="og:description" content="IT consultant in Catania: data engineering, application support and personal projects in AI and software.">
+  <meta property="og:image" content="assets/preview.png">
+    <script>
+    /* Se un'immagine non esiste con l'estensione scritta nel codice, prova da sola
+       le altre (png, jpg, jpeg, webp): così non importa con quale formato salvi i file. */
+    (function () {
+      var EXT = ['png', 'jpg', 'jpeg', 'webp'];
+      window.addEventListener('error', function (e) {
+        var img = e.target;
+        if (!img || img.tagName !== 'IMG') return;
+        var m = img.getAttribute('src').match(/^(.*)\.(png|jpe?g|webp)$/i);
+        if (!m) return;
+        var tried = (img.dataset.tried || m[2].toLowerCase()).split(',');
+        var next = EXT.filter(function (x) { return tried.indexOf(x) === -1; })[0];
+        if (!next) return;
+        img.dataset.tried = tried.concat(next).join(',');
+        img.src = m[1] + '.' + next;
+        var box = img.closest('.portrait');
+        if (box) box.style.setProperty('--photo', 'url("' + img.getAttribute('src') + '")');
+      }, true);
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="Giovanni Emanuel Montoro"><span class="logo" aria-hidden="true">GM</span><span class="brand-name">Giovanni Montoro</span></a>
+    <nav class="nav">
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#experience" data-i18n="nav.exp">Experience</a>
+      <a href="#projects" data-i18n="nav.proj">Projects</a>
+      <a href="#skills" data-i18n="nav.skills">Skills</a>
+      <a href="#education" data-i18n="nav.edu">Education</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="it" aria-pressed="false">IT</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="chips">
+          <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span data-i18n="hero.role">IT Consultant</span></span>
+          <span class="chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg><span data-i18n="hero.loc">Catania, Italy</span></span>
+        </div>
+        <h1>Giovanni Emanuel <span class='accent'>Montoro</span></h1>
+        <p class="lead" data-i18n="hero.lead">Curiosity about how everyday technology works brought me to IT. Today I work on application support for STMicroelectronics, after data engineering projects in the cloud.</p>
+        <div class="actions">
+          <a class="btn primary" href="mailto:montgiovem@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span data-i18n="hero.cta">Get in touch</span></a>
+          <a class="btn" href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5m0 2a2 2 0 0 1 4 0v3"/></svg>LinkedIn</a>
+        </div>
+      </div>
+      <div class="portrait" style="--photo: url('assets/preview.png')"><span class="veil" aria-hidden="true"></span><img src="assets/preview.png" alt="Giovanni Emanuel Montoro"></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="about.kicker">About</span>
+        <h2 data-i18n="about.title">Curiosity, turned into <span class='accent'>a job</span></h2>
+      </div>
+      <div class="about">
+        <div class="text">
+          <p data-i18n="about.p1">I've always wondered how the things we all use every day actually work, starting with apps. That question is what led me to technology.</p>
+          <p data-i18n="about.p2">I graduated in Computer Science and Telecommunications from ITI Cannizzaro with 100/100. During my studies I led the team that built a waste-sorting robot, presented in Rome at the “Scuola Futura” event at the invitation of the Italian Ministry of Education. In the same period I had my first work experience at Bcame, writing automated tests for the e-commerce site of a well-known Italian fashion brand.</p>
+          <p data-i18n="about.p3">After graduating I joined Tri-Tech Solutions, working on cloud data engineering projects for multinational clients. Today, with IF Consulting, I work on an application support project for STMicroelectronics.</p>
+          <p data-i18n="about.p4">Outside work I'm passionate about Italian dubbing, cinema and 3D animation, 17th and 18th-century history, and management games.</p>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="block" id="experience">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="exp.kicker">Experience</span>
+        <h2 data-i18n="exp.title">Where I've <span class='accent'>worked</span></h2>
+      </div>
+      <div class="timeline">
+        <article class="job">
+          <span class="when" data-i18n="j1.when">Aug 2026 — present</span>
+          <div>
+            <h3>Application Support</h3>
+            <div class="where">IF Consulting <span data-i18n="j1.where">· Catania · Hybrid</span></div>
+            <p data-i18n="j1.p">I work on an application support project for <strong>STMicroelectronics</strong>, a multinational leader in semiconductors.</p>
+          </div>
+        </article>
+        <article class="job">
+          <span class="when" data-i18n="j2.when">Jan 2026 — Aug 2026</span>
+          <div>
+            <h3>Data Engineering</h3>
+            <div class="where">Tri-Tech Solutions <span data-i18n="j2.where">· Catania · Hybrid</span></div>
+            <p data-i18n="j2.p">I worked on a data engineering project for a multinational leader in Home Appliances / Consumer Electronics, a client of one of the world's leading consulting firms.</p>
+            <ul>
+              <li data-i18n="j2.l1">End-to-end handling of change and enhancement requests opened by the client on ServiceNow: analysis of the data flows and jobs involved, direct discussion with the client and implementation of the changes.</li>
+              <li data-i18n="j2.l2">Technical documentation of the changes made.</li>
+            </ul>
+            <div class="tags"><span class="tag">AWS S3</span><span class="tag">Glue</span><span class="tag">AppFlow</span><span class="tag">Athena</span><span class="tag">Redshift</span><span class="tag">PySpark</span><span class="tag">ServiceNow</span></div>
+            <p class="note" data-i18n="j2.note">I also studied Google Cloud Platform (BigQuery, Dataproc and Apache Airflow) for a further project.</p>
+          </div>
+        </article>
+        <article class="job">
+          <span class="when" data-i18n="j3.when">Nov 2024 — Dec 2024</span>
+          <div>
+            <h3>QA Automation Tester</h3>
+            <div class="where">Bcame S.r.l. <span data-i18n="j3.where">· Catania · On-site</span></div>
+            <p data-i18n="j3.p">I worked on a quality assurance project for the e-commerce site of a well-known Italian fashion brand.</p>
+            <ul>
+              <li data-i18n="j3.l1">Automated tests to verify that the site's features work correctly.</li>
+              <li data-i18n="j3.l2">Tests integrated into a CI/CD pipeline to catch issues before production releases.</li>
+              <li data-i18n="j3.l3">Manual testing to find bugs.</li>
+            </ul>
+            <div class="tags"><span class="tag">Selenium</span><span class="tag">Jenkins</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section class="block" id="projects">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="proj.kicker">Projects</span>
+        <h2 data-i18n="proj.title">Things I've <span class='accent'>built</span></h2>
+      </div>
+
+      <article class="featured">
+        <div class="frame"><video src="assets/projects/quickllm.mp4" muted loop playsinline autoplay preload="metadata" disablepictureinpicture tabindex="-1"></video></div>
+        <div class="body">
+          <div class="intro">
+            <div class="row"><span class="kicker" data-i18n="ql.kicker">Featured</span><span class="tag" data-i18n="ql.date">Apr 2026 — present</span></div>
+            <h3>Quick<span class='accent'>LLM</span></h3>
+            <p data-i18n="ql.p1">A self-hosted, multimodal generative AI platform (text, images, video, 3D models and music) designed to run on a single 8 GB GPU. A local LLM plans each request and orchestrates a generation queue that swaps models in and out of VRAM.</p>
+          </div>
+          <div class="side">
+            <p data-i18n="ql.p2">Two Linux machines connected via Tailscale, isolated production and staging, CI/CD with backup and rollback. AI-assisted development.</p>
+            <div class="row"><span class="tag">LM Studio</span><span class="tag">ComfyUI</span><span class="tag">Docker</span><span class="tag">Nginx</span><span class="tag">GitHub Actions</span></div>
+            <a class="btn" href="quickllm/"><span data-i18n="ql.cta">Explore the project</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <div class="scrolly">
+        <div class="steps">
+
+        <article class="project" id="p-quickproject">
+          <figure class="pmedia desktop"><div class="screen"><video src="assets/projects/quickproject.mp4" muted loop playsinline preload="metadata" disablepictureinpicture tabindex="-1"></video></div></figure>
+          <span class="num">01</span>
+          <h3>QuickProject</h3>
+          <span class="date" data-i18n="quickproject.date">2023 — present</span>
+          <p data-i18n="quickproject.desc">A web platform for Agile/Scrum project management. Each user has a private area with a Kanban board to track features and bugs through states and tags, can make projects public and receive feature proposals from other users, handled through an approval workflow.</p>
+          <div class="tags"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Tailwind CSS</span></div>
+          <a class="btn project-btn" href="https://groupofthree.altervista.org/QuickProject/" target="_blank" rel="noopener"><span data-i18n="proj.visit">View project</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </article>
+
+        <article class="project" id="p-johnote">
+          <figure class="pmedia desktop"><div class="screen"><img src="assets/projects/johnote.jpg" alt="JohNote screenshot" data-i18n-alt="alt.johnote" loading="lazy"></div></figure>
+          <span class="num">02</span>
+          <h3>JohNote</h3>
+          <span class="date" data-i18n="johnote.date">2022 — present</span>
+          <p data-i18n="johnote.desc">A desktop note-taking app with a built-in AI assistant, web search, multimedia content and encrypted files in a proprietary format.</p>
+          <div class="tags"><span class="tag">C#</span><span class="tag">WPF</span></div>
+          <a class="btn project-btn" href="https://groupofthree.altervista.org/JohNote/" target="_blank" rel="noopener"><span data-i18n="proj.visit">View project</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </article>
+
+        <article class="project" id="p-quicktv">
+          <figure class="pmedia phone"><div class="screen"><img src="assets/projects/quicktv.jpg" alt="QuickTV screenshot" data-i18n-alt="alt.quicktv" loading="lazy"></div></figure>
+          <span class="num">03</span>
+          <h3>QuickTV</h3>
+          <span class="date" data-i18n="quicktv.date">2021 — 2022</span>
+          <p data-i18n="quicktv.desc">A unified home screen for smart TVs that brings every streaming platform together, with filtered search and a summary of monthly subscriptions.</p>
+          <div class="tags"><span class="tag">C#</span><span class="tag">Xamarin</span></div>
+          <a class="btn project-btn" href="https://groupofthree.altervista.org/QuickTV" target="_blank" rel="noopener"><span data-i18n="proj.visit">View project</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </article>
+
+        <article class="project" id="p-oldos">
+          <figure class="pmedia desktop"><div class="screen"><img src="assets/projects/oldos.jpg" alt="OldOS screenshot" data-i18n-alt="alt.oldos" loading="lazy"></div></figure>
+          <span class="num">04</span>
+          <h3>OldOS</h3>
+          <span class="date" data-i18n="oldos.date">Jul 2025</span>
+          <p data-i18n="oldos.desc">A web app that gives old devices a second life by turning them into customisable always-on digital clocks.</p>
+          <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">PHP</span></div>
+          <a class="btn project-btn" href="https://groupofthree.altervista.org/OldOS/" target="_blank" rel="noopener"><span data-i18n="proj.visit">View project</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        </article>
+        </div>
+        <div class="stage" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="block" id="skills">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="sk.kicker">Skills</span>
+        <h2 data-i18n="sk.title">What I <span class='accent'>work with</span></h2>
+      </div>
+      <div class="skills">
+        <div class="skill"><h3>Data &amp; Analytics</h3><div class="tags"><span class="tag">SQL</span><span class="tag">PL/SQL</span><span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">NumPy</span><span class="tag">PySpark</span><span class="tag">Talend</span><span class="tag">Data Warehouse</span><span class="tag">Power BI</span><span class="tag">DAX</span></div></div>
+        <div class="skill"><h3>Cloud</h3><div class="tags"><span class="tag">AWS S3</span><span class="tag">Glue</span><span class="tag">AppFlow</span><span class="tag">Athena</span><span class="tag">Redshift</span><span class="tag">BigQuery</span><span class="tag">Dataproc</span><span class="tag">Airflow</span></div></div>
+        <div class="skill"><h3 data-i18n="sk.infra">Infrastructure</h3><div class="tags"><span class="tag">Linux</span><span class="tag">Docker</span><span class="tag">Nginx</span><span class="tag">systemd</span><span class="tag">Tailscale</span><span class="tag">GitHub Actions</span></div></div>
+        <div class="skill"><h3 data-i18n="sk.dev">Development</h3><div class="tags"><span class="tag">C#</span><span class="tag">.NET</span><span class="tag">WPF</span><span class="tag">Xamarin</span><span class="tag">PHP</span><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">MySQL</span></div></div>
+        <div class="skill"><h3 data-i18n="sk.tools">Tools</h3><div class="tags"><span class="tag">Git</span><span class="tag">Jenkins</span><span class="tag">Selenium</span><span class="tag">ServiceNow</span><span class="tag">Excel</span></div></div>
+        <div class="skill"><h3 data-i18n="sk.lang">Languages</h3><div class="tags"><span class="tag" data-i18n="sk.it">Italian · native</span><span class="tag" data-i18n="sk.en">English · B2</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section class="block" id="education">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker" data-i18n="edu.kicker">Education</span>
+        <h2 data-i18n="edu.title">Education and <span class='accent'>certifications</span></h2>
+      </div>
+      <div class="edu">
+        <div class="course">
+          <span class="when">2020 — 2025</span>
+          <h3 data-i18n="e1.t">Diploma in Computer Science and Telecommunications</h3>
+          <div class="where" data-i18n="e1.w">ITI S. Cannizzaro · Catania · Final grade 100/100</div>
+        </div>
+        <div class="course">
+          <span class="when" data-i18n="e2.when">Sep 2025 — Nov 2025</span>
+          <h3>Tri-Tech Academy · Data Engineering &amp; Business Intelligence</h3>
+          <div class="where" data-i18n="e2.w">Digital One S.r.l. · at Tri-Tech Solutions · 240 hours</div>
+          <p data-i18n="e2.p">Theory and practice on SQL and PL/SQL, Python for data analysis, ETL processes, data warehousing, Power BI and applied statistics.</p>
+        </div>
+        <div class="course">
+          <span class="when" data-i18n="e3.when">Feb 2025</span>
+          <h3>CCNAv7: Introduction to Networks</h3>
+          <div class="where">Cisco Networking Academy</div>
+        </div>
+        <div class="course">
+          <span class="when" data-i18n="e4.when">Dec 2023</span>
+          <h3>Introduction to Cybersecurity</h3>
+          <div class="where">Cisco Networking Academy</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <span class="kicker" data-i18n="ct.kicker">Contact</span>
+      <h2 data-i18n="ct.title">Let's stay in <span class='accent'>touch</span></h2>
+      <p data-i18n="ct.p">You can reach me by email or on LinkedIn.</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:montgiovem@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>montgiovem@gmail.com</a>
+        <a class="btn" href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5m0 2a2 2 0 0 1 4 0v3"/></svg>LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Giovanni Emanuel Montoro</span>
+    <span>Mascalucia (CT), Italia</span>
+  </div>
+</footer>
+
+<script>
+  /* ---------- Lingua: inglese nel markup, italiano qui sotto ---------- */
+  const IT = {
+  "proj.visit": "Vedi il progetto",
+  "nav.about": "Chi sono",
+  "nav.exp": "Esperienza",
+  "nav.proj": "Progetti",
+  "nav.skills": "Competenze",
+  "nav.edu": "Formazione",
+  "nav.contact": "Contatti",
+  "hero.role": "Consulente IT",
+  "hero.loc": "Catania, Italia",
+  "hero.lead": "La curiosità per come funziona la tecnologia di tutti i giorni mi ha portato all'informatica. Oggi mi occupo di application support per STMicroelectronics, dopo progetti di data engineering in cloud.",
+  "hero.cta": "Contattami",
+  "about.kicker": "Chi sono",
+  "about.title": "La curiosità, diventata <span class='accent'>un lavoro</span>",
+  "about.p1": "Mi sono sempre chiesto come funzionassero le cose che oggi tutti usiamo, a partire dalle applicazioni. È questa domanda ad avermi avvicinato alla tecnologia.",
+  "about.p2": "Mi sono diplomato in Informatica e Telecomunicazioni all'ITI Cannizzaro con 100/100. Durante gli studi ho guidato il team che ha sviluppato un robot per la raccolta differenziata, presentato a Roma all'evento “Scuola Futura” su invito del Ministero dell'Istruzione e del Merito. Nello stesso periodo ho svolto la mia prima esperienza lavorativa presso Bcame, occupandomi di test automatici per l'e-commerce di un noto brand della moda italiana.",
+  "about.p3": "Dopo il diploma sono entrato in Tri-Tech Solutions, dove ho lavorato su progetti di data engineering in ambito cloud per clienti multinazionali. Oggi, con IF Consulting, seguo un progetto di application support per STMicroelectronics.",
+  "about.p4": "Fuori dal lavoro mi appassionano il doppiaggio italiano, il cinema e l'animazione 3D, la storia del Seicento e del Settecento e i videogiochi gestionali.",
+  "exp.kicker": "Esperienza",
+  "exp.title": "Dove ho <span class='accent'>lavorato</span>",
+  "j1.when": "ago 2026 — oggi",
+  "j1.where": "· Catania · Ibrido",
+  "j1.p": "Lavoro su un progetto di application support per <strong>STMicroelectronics</strong>, multinazionale leader nel settore dei semiconduttori.",
+  "j2.when": "gen 2026 — ago 2026",
+  "j2.where": "· Catania · Ibrido",
+  "j2.p": "Ho lavorato su un progetto di data engineering per una multinazionale leader nel settore Home Appliances / Consumer Electronics, cliente di una delle principali società di consulenza a livello internazionale.",
+  "j2.l1": "Gestione end-to-end delle richieste di change ed evolutive aperte dal cliente su ServiceNow: analisi dei flussi dati e dei job coinvolti, confronto diretto con il cliente e implementazione delle modifiche.",
+  "j2.l2": "Redazione della documentazione tecnica relativa alle modifiche effettuate.",
+  "j2.note": "Ho inoltre approfondito Google Cloud Platform (BigQuery, Dataproc e Apache Airflow) nell'ambito di un ulteriore progetto.",
+  "j3.when": "nov 2024 — dic 2024",
+  "j3.where": "· Catania · In sede",
+  "j3.p": "Ho lavorato su un progetto di quality assurance per l'e-commerce di un noto brand della moda italiana.",
+  "j3.l1": "Sviluppo di test automatici per verificare il corretto funzionamento delle funzionalità del sito.",
+  "j3.l2": "Integrazione dei test in una pipeline CI/CD per intercettare eventuali anomalie prima del rilascio in produzione.",
+  "j3.l3": "Test manuali per l'individuazione di bug.",
+  "proj.kicker": "Progetti",
+  "proj.title": "Cose che ho <span class='accent'>creato</span>",
+  "ql.kicker": "In evidenza",
+  "ql.date": "apr 2026 — oggi",
+  "ql.p1": "Piattaforma di AI generativa self-hosted e multimodale (testo, immagini, video, modelli 3D e musica) progettata per funzionare su una singola GPU da 8 GB. Un LLM locale pianifica ogni richiesta e orchestra una coda di generazione che alterna i modelli in VRAM.",
+  "ql.p2": "Due macchine Linux collegate via Tailscale, produzione e staging isolati, CI/CD con backup e rollback. Sviluppo assistito da AI.",
+  "ql.cta": "Scopri il progetto",
+  "johnote.date": "2022 — oggi",
+  "johnote.desc": "App desktop per prendere appunti con assistente AI integrato, ricerca web, contenuti multimediali e file cifrati in formato proprietario.",
+  "quickproject.date": "2023 — oggi",
+  "quickproject.desc": "Piattaforma web per la gestione di progetti con metodologia Agile/Scrum. Ogni utente dispone di un'area riservata con board Kanban per tracciare feature e bug tramite stati e tag, può rendere pubblici i propri progetti e ricevere proposte di nuove funzionalità da altri utenti, gestite con un flusso di approvazione.",
+  "quicktv.date": "2021 — 2022",
+  "quicktv.desc": "Home unificata per Smart TV che raccoglie tutte le piattaforme di streaming, con ricerca per filtri e riepilogo degli abbonamenti.",
+  "oldos.date": "lug 2025",
+  "oldos.desc": "Web app che dà nuova vita a dispositivi obsoleti trasformandoli in orologi digitali always-on personalizzabili.",
+  "sk.kicker": "Competenze",
+  "sk.title": "Con cosa <span class='accent'>lavoro</span>",
+  "sk.infra": "Infrastruttura",
+  "sk.dev": "Sviluppo",
+  "sk.tools": "Strumenti",
+  "sk.lang": "Lingue",
+  "sk.it": "Italiano · madrelingua",
+  "sk.en": "Inglese · B2",
+  "edu.kicker": "Formazione",
+  "edu.title": "Studi e <span class='accent'>certificazioni</span>",
+  "e1.t": "Diploma di Perito in Informatica e Telecomunicazioni",
+  "e1.w": "ITI S. Cannizzaro · Catania · Votazione finale 100/100",
+  "e2.when": "set 2025 — nov 2025",
+  "e2.w": "Digital One S.r.l. · presso Tri-Tech Solutions · 240 ore",
+  "e2.p": "Percorso teorico-pratico su SQL e PL/SQL, Python per l'analisi dei dati, processi ETL, Data Warehouse, Power BI e statistica applicata.",
+  "e3.when": "feb 2025",
+  "e4.when": "dic 2023",
+  "ct.kicker": "Contatti",
+  "ct.title": "Restiamo in <span class='accent'>contatto</span>",
+  "ct.p": "Puoi contattarmi via email o su LinkedIn.",
+  "alt.johnote": "Schermata di JohNote",
+  "alt.quicktv": "Schermata di QuickTV",
+  "alt.oldos": "Schermata di OldOS",
+  "alt.joinchat": "Schermata di JoinChat"
+};
+  const META = {
+    en: { title: document.title, desc: document.querySelector('meta[name="description"]').content },
+    it: { title: "Giovanni Emanuel Montoro — Consulente IT",
+          desc: "Portfolio di Giovanni Emanuel Montoro, consulente IT a Catania: data engineering, application support e progetti personali tra AI e software." }
+  };
+  const EN = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { EN[el.dataset.i18n] = el.innerHTML; });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => { if (el.dataset.i18nAlt) EN[el.dataset.i18nAlt] = el.alt; });
+
+  function setLang(next) {
+    const lang = next === 'it' ? 'it' : 'en';
+    const dict = lang === 'it' ? IT : EN;
+    document.querySelectorAll('[data-i18n]').forEach(el => { const v = dict[el.dataset.i18n]; if (v != null) el.innerHTML = v; });
+    document.querySelectorAll('[data-i18n-alt]').forEach(el => { const v = dict[el.dataset.i18nAlt]; if (v != null) el.alt = v; });
+    document.documentElement.lang = lang;
+    document.title = META[lang].title;
+    document.querySelector('meta[name="description"]').content = META[lang].desc;
+    document.querySelectorAll('.lang-switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+    try { localStorage.setItem('portfolio-lang', lang); } catch (e) {}
+  }
+  document.querySelectorAll('.lang-switch button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  let saved = null;
+  try { saved = localStorage.getItem('portfolio-lang'); } catch (e) {}
+  if (saved === 'it') setLang('it');
+
+  /* ---------- Video: loop senza controlli, solo quando visibili ---------- */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const play = v => { if (!reduceMotion) v.play().catch(() => {}); };
+  document.querySelectorAll('video').forEach(v => v.addEventListener('contextmenu', e => e.preventDefault()));
+
+  // Video fuori dal racconto (progetto in evidenza e media su schermi stretti)
+  const inView = new IntersectionObserver(entries => {
+    entries.forEach(e => e.isIntersecting ? play(e.target) : e.target.pause());
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.featured video, .project .pmedia video').forEach(v => inView.observe(v));
+
+  /* ---------- Progetti: il media a destra cambia mentre si scorre ---------- */
+  const stage = document.querySelector('.stage');
+  const projects = [...document.querySelectorAll('.project')];
+  const stageItems = projects.map(p => {
+    const clone = p.querySelector('.pmedia').cloneNode(true);
+    clone.querySelectorAll('[data-i18n-alt]').forEach(el => el.alt = '');
+    stage.appendChild(clone);
+    return clone;
+  });
+  const wide = window.matchMedia('(min-width: 901px)');
+  function activate(i) {
+    projects.forEach((p, j) => p.classList.toggle('active', j === i));
+    stageItems.forEach((m, j) => {
+      m.classList.toggle('active', j === i);
+      const v = m.querySelector('video');
+      if (v) (j === i && wide.matches) ? play(v) : v.pause();
+    });
+  }
+  const scrollObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) activate(projects.indexOf(e.target)); });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  projects.forEach(p => scrollObs.observe(p));
+  activate(0);
+  wide.addEventListener('change', () => activate(projects.findIndex(p => p.classList.contains('active'))));
+</script>
+</body>
+</html>
