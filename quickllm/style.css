@@ -89,6 +89,19 @@ a:hover { text-decoration: underline; }
 .logo-icon { font-size: 18px; color: var(--accent); line-height: 1; }
 .logo-text { font-family: var(--font-serif); font-size: 18px; letter-spacing: -.3px; }
 .logo-text em { color: var(--accent); font-style: italic; }
+/* Ritorno al portfolio: pillola discreta accanto al logo, separata da un filetto */
+.back-portfolio {
+  display: inline-flex; align-items: center; gap: 5px; flex: none;
+  margin-left: 4px; padding: 5px 12px 5px 8px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 500; letter-spacing: .03em; color: var(--text-muted);
+  border: 1px solid var(--accent-border); background: var(--accent-dim);
+  position: relative; transition: background .18s, border-color .18s, color .18s;
+}
+.back-portfolio::before { content: ""; position: absolute; left: -9px; top: 20%; bottom: 20%; width: 1px; background: var(--glass-border); }
+.back-portfolio svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .18s; }
+.back-portfolio:hover { color: var(--text); background: rgba(183,154,221,.2); border-color: rgba(183,154,221,.45); text-decoration: none; }
+.back-portfolio:hover svg { transform: translateX(-2px); }
+.back-portfolio:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .nav { display: flex; gap: 6px; margin-left: auto; }
 .nav a {
   color: var(--text-muted); font-size: 11.5px; font-weight: 500; letter-spacing: .03em;

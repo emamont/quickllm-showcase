@@ -40,6 +40,7 @@
   <div class="wrap">
     <div class="glass">
       <a class="app-logo" href="#"><span class="logo-icon">◈</span><span class="logo-text">Quick<em>LLM</em></span></a>
+      <a class="back-portfolio" href="../#projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span data-i18n="nav.back">Portfolio</span></a>
       <nav class="nav">
         <a href="#problem" data-i18n="nav.problem">The problem</a>
         <a href="#generate" data-i18n="nav.generate">What it generates</a>
@@ -369,7 +370,7 @@
   <div class="wrap">
     <div class="glass">
       <span data-i18n="footer">QuickLLM · a project by Giovanni Emanuel Montoro · infrastructure and orchestration, AI-assisted development</span>
-      <span><a href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/">LinkedIn</a> · <a href="mailto:montgiovem@gmail.com">montgiovem@gmail.com</a></span>
+      <span><a href="../#projects" class="back-link" data-i18n="footer.back">← Back to portfolio</a> · <a href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/">LinkedIn</a> · <a href="mailto:montgiovem@gmail.com">montgiovem@gmail.com</a></span>
     </div>
   </div>
 </footer>
@@ -382,6 +383,8 @@
 <script>
   /* ---------- Lingua: inglese nel markup, italiano qui sotto ---------- */
   const IT = {
+  "nav.back": "Portfolio",
+  "footer.back": "← Torna al portfolio",
   "nav.problem": "Il problema",
   "nav.generate": "Cosa genera",
   "nav.features": "Funzionalità",
@@ -504,6 +507,10 @@
     try { localStorage.setItem('quickllm-lang', lang); } catch (e) {}
   }
   document.querySelectorAll('.lang-switch button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  /* Tornando al portfolio, porta con sé la lingua scelta qui */
+  document.querySelectorAll('.back-portfolio, .back-link').forEach(a => a.addEventListener('click', () => {
+    try { localStorage.setItem('portfolio-lang', lang); } catch (e) {}
+  }));
 
   /* ---------- Video in loop: nessun controllo di avanzamento, solo pausa e ripresa ---------- */
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
