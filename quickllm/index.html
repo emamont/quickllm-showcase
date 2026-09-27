@@ -40,7 +40,6 @@
   <div class="wrap">
     <div class="glass">
       <a class="app-logo" href="#"><span class="logo-icon">◈</span><span class="logo-text">Quick<em>LLM</em></span></a>
-      <a class="back-portfolio" href="../#projects"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg><span data-i18n="nav.back">Portfolio</span></a>
       <nav class="nav">
         <a href="#problem" data-i18n="nav.problem">The problem</a>
         <a href="#generate" data-i18n="nav.generate">What it generates</a>
@@ -364,13 +363,28 @@
     </div>
   </section>
 
+  <!-- ================= AUTORE ================= -->
+  <section id="author" class="author">
+    <div class="wrap">
+      <div class="card author-card">
+        <img class="author-photo" src="../assets/preview.png" alt="Giovanni Emanuel Montoro" loading="lazy">
+        <div class="author-text">
+          <span class="kicker" data-i18n="author.kicker">Built by</span>
+          <span class="author-name">Giovanni Emanuel Montoro</span>
+          <p data-i18n="author.text">IT consultant based in Catania, working across data engineering, application support and AI. QuickLLM is one of my personal projects: you'll find the others, along with my background, on my portfolio.</p>
+        </div>
+        <a class="author-cta" href="../"><span data-i18n="author.cta">Visit my portfolio</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
   <div class="wrap">
     <div class="glass">
       <span data-i18n="footer">QuickLLM · a project by Giovanni Emanuel Montoro · infrastructure and orchestration, AI-assisted development</span>
-      <span><a href="../#projects" class="back-link" data-i18n="footer.back">← Back to portfolio</a> · <a href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/">LinkedIn</a> · <a href="mailto:montgiovem@gmail.com">montgiovem@gmail.com</a></span>
+      <span><a href="https://www.linkedin.com/in/giovanni-emanuel-montoro-bb42462a5/">LinkedIn</a> · <a href="mailto:montgiovem@gmail.com">montgiovem@gmail.com</a></span>
     </div>
   </div>
 </footer>
@@ -383,8 +397,6 @@
 <script>
   /* ---------- Lingua: inglese nel markup, italiano qui sotto ---------- */
   const IT = {
-  "nav.back": "Portfolio",
-  "footer.back": "← Torna al portfolio",
   "nav.problem": "Il problema",
   "nav.generate": "Cosa genera",
   "nav.features": "Funzionalità",
@@ -472,6 +484,9 @@
   "pipe.d": "Il deploy in produzione parte solo se lo staging è verde, con backup del database e rollback.",
   "stack.kicker": "Tecnologie",
   "stack.title": "Lo stack del progetto",
+  "author.kicker": "Realizzato da",
+  "author.text": "Consulente IT a Catania, tra data engineering, application support e intelligenza artificiale. QuickLLM è uno dei miei progetti personali: gli altri, insieme al mio percorso, li trovi nel portfolio.",
+  "author.cta": "Visita il mio portfolio",
   "footer": "QuickLLM · progetto di Giovanni Emanuel Montoro · infrastruttura e orchestrazione, sviluppo assistito da AI",
   "alt.cinematic": "Immagine cinematografica generata con FLUX",
   "alt.square": "Immagine quadrata generata con FLUX",
@@ -508,7 +523,7 @@
   }
   document.querySelectorAll('.lang-switch button').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
   /* Tornando al portfolio, porta con sé la lingua scelta qui */
-  document.querySelectorAll('.back-portfolio, .back-link').forEach(a => a.addEventListener('click', () => {
+  document.querySelectorAll('.author-cta').forEach(a => a.addEventListener('click', () => {
     try { localStorage.setItem('portfolio-lang', lang); } catch (e) {}
   }));
 
